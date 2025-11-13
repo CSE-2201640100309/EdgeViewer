@@ -8,6 +8,13 @@ android {
     compileSdk {
         version = release(36)
     }
+    ndkVersion = "25.1.8937393" // example; pick installed version
+    externalNativeBuild {
+        cmake {
+            path = "CMakeLists.txt"
+            version = "3.22.1"
+        }
+    }
 
     defaultConfig {
         applicationId = "com.example.edgeviewer1"
@@ -17,6 +24,11 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        externalNativeBuild {
+            cmake {
+                cppFlags = "-std=c++17"
+            }
+        }
     }
 
     buildTypes {
