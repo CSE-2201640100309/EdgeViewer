@@ -18,6 +18,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import java.nio.ByteBuffer
+
 class MainActivity : AppCompatActivity() {
     private lateinit var textureView: TextureView
     private lateinit var cameraManager: CameraManager
@@ -73,4 +75,19 @@ class MainActivity : AppCompatActivity() {
             override fun onConfigureFailed(session: CameraCaptureSession) {}
         }, null)
     }
+    fun getRGBAFromTexture(): ByteArray {
+        val bmp = textureView.bitmap ?: return ByteArray(0)
+        val w = bmp.width
+        val h = bmp.height
+        val buf = ByteBuffer.allocate(w*h*4)
+        bmp.copyPixelsToBuffer(buf)
+        return buf.array()
+    }
+
+    // call native
+    val input = getRGBAFromTexture()
+    val out = NativeBridge.processFrame(input, bmp.width, bmp.height)
+// convert out bytes to Bitmap and display via GL or ImageView
+
 }
+
